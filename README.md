@@ -2,7 +2,7 @@
 
 AI Bot for booking.riddles.io
 
-A collaborative effort with help of [flow][makemeflow.org]
+A collaborative effort with help of [flow](makemeflow.org)
 
 # Installation
 
