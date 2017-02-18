@@ -26,8 +26,6 @@ class Game():
         self.last_update = 0
         self.last_timebank = 0
         self.max_rounds = 0
-        # last_move None means a pass, otherwise it will be (row, col)
-        self.last_move = None
 
         self.players = [player.Player(), player.Player()]
 
@@ -42,7 +40,7 @@ class Game():
         # start timer
         self.last_update = time.time()
         for line in data.split('\n'):
-            line = line.strip().lower()
+            line = line.strip()
             if len(line) > 0:
                 tokens = line.split()
                 key0 = tokens[0]
