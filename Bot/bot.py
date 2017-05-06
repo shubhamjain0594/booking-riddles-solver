@@ -2,9 +2,10 @@ import random
 import sys
 import queue
 import Bot.points as points
+import math
 
 # sys.stderr = open('/home/users/shubham/projects/hack-man-engine/error', 'w+')
-# sys.stderr = open('/home/users/shubham/projects/booking-riddle/error', 'w+')
+sys.stderr = open('/home/users/shubham/projects/booking-riddle/error', 'w+')
 
 PLAYER1, PLAYER2, EMPTY, BLOCKED, BUG, WEAPON, CODE = [0, 1, 2, 3, 4, 5, 6]
 
@@ -49,6 +50,7 @@ class Bot:
         best_move = None
         for move in legal_moves:
             score = self.get_scores_move(move)
+            sys.stderr(score)
             if score > best_score:
                 best_move = move
                 best_score = score
@@ -57,13 +59,13 @@ class Bot:
         return best_move
 
     def get_score_helper(self, dist, vals):
-        if dist > vals[3]:
+        if vals[2] and dist > vals[2]:
             return 0
-        score = vals[0] + max(dist - 1, 0) * vals[1]
-        if vals[1] < 0:
-            score = max(score, vals[2])
-        else:
-            score = min(score, vals[2])
+        score = vals[0] * math.exp(-1 * (dist - 1) / (1.0 * vals[1]))
+        # if vals[1] < 0:
+        #     score = max(score, vals[2])
+        # else:
+        #     score = min(score, vals[2])
         return score
 
     def get_scores_move(self, move):
@@ -106,17 +108,17 @@ class Bot:
             if snippet not in self.opponent_dist or (dist_vert[snippet[0]][snippet[1]] + self.my_id <= self.opponent_dist[snippet] + self.opponent_id):
                 score += self.get_score_helper(dist_vert[snippet[0]][snippet[1]],
                                                points.POINTS[1])
-            else:
-                score += self.get_score_helper(dist_vert[snippet[0]][snippet[1]],
-                                              points.POINTS[1]) / 2.0
+            # else:
+            #     score += self.get_score_helper(dist_vert[snippet[0]][snippet[1]],
+            #                                    points.POINTS[1]) / 2.0
 
         for weapon in self.game.field.weapons:
             if weapon not in self.opponent_dist or (dist_vert[weapon[0]][weapon[1]] + self.my_id <= self.opponent_dist[weapon] + self.opponent_id):
                 score += self.get_score_helper(dist_vert[weapon[0]][weapon[1]],
                                                points.POINTS[2])
-            else:
-                score += self.get_score_helper(dist_vert[weapon[0]][weapon[1]],
-                                               points.POINTS[2]) / 2.0
+            # else:
+            #     score += self.get_score_helper(dist_vert[weapon[0]][weapon[1]],
+            #                                    points.POINTS[2]) / 2.0
 
         if self.game.players[self.opponent_id].has_weapon and not self.game.players[self.my_id].has_weapon:
             pos = self.game.field.bot_pos[self.opponent_id]

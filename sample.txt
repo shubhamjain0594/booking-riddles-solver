@@ -16,4 +16,3 @@ update player1 snippets 0
 update player1 has_weapon false
 update player1 is_paralyzed false
 action move 10000
-
